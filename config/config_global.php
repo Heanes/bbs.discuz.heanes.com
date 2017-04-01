@@ -4,12 +4,12 @@
 $_config = array();
 
 // ----------------------------  CONFIG DB  ----------------------------- //
-$_config['db']['1']['dbhost'] = 'localhost';
+$_config['db']['1']['dbhost'] = '127.0.0.1';
 $_config['db']['1']['dbuser'] = 'root';
 $_config['db']['1']['dbpw'] = '123456';
 $_config['db']['1']['dbcharset'] = 'utf8';
 $_config['db']['1']['pconnect'] = '0';
-$_config['db']['1']['dbname'] = 'bbs.heanes.com';
+$_config['db']['1']['dbname'] = 'bbs.discuz.heanes.com';
 $_config['db']['1']['tablepre'] = 'heanes_';
 $_config['db']['slave'] = '';
 $_config['db']['common']['slave_except_table'] = '';
