@@ -58,7 +58,7 @@ GMT<?php echo $_G['timenow']['offset'];?>, <?php echo $_G['timenow']['time'];?>
 </div>
 <div id="frt">
 <p>Powered by <strong><a href="http://www.discuz.net" target="_blank">Discuz!</a></strong> <em><?php echo $_G['setting']['version'];?></em><?php if(!empty($_G['setting']['boardlicensed'])) { ?> <a href="http://license.comsenz.com/?pid=1&amp;host=<?php echo $_SERVER['HTTP_HOST'];?>" target="_blank">Licensed</a><?php } ?></p>
-<p class="xs0">&copy; 2001-2013 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p>
+<p class="xs0">&copy; 2001-2017 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p>
 </div><?php updatesession();?><?php if($_G['uid'] && $_G['group']['allowinvisible']) { ?>
 <script type="text/javascript">
 var invisiblestatus = '<?php if($_G['session']['invisible']) { ?>隐身<?php } else { ?>在线<?php } ?>';
@@ -81,9 +81,7 @@ if(loginstatusobj != undefined && loginstatusobj != null) loginstatusobj.innerHT
 <?php } if($space['self'] && CURMODULE == 'space' && $do == 'index') { ?>
 <script src="<?php echo $_G['setting']['jspath'];?>common_diy.js?<?php echo VERHASH;?>" type="text/javascript"></script>
 <script src="<?php echo $_G['setting']['jspath'];?>space_diy.js?<?php echo VERHASH;?>" type="text/javascript"></script>
-<?php } } if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && $_G['setting']['showpatchnotice'] == 1) { ?>
-<script type="text/javascript">patchNotice();</script>
-<?php } if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && empty($_G['cookie']['pluginnotice'])) { ?>
+<?php } } if($_G['uid'] && $_G['member']['allowadmincp'] == 1 && empty($_G['cookie']['pluginnotice'])) { ?>
 <div class="focus plugin" id="plugin_notice"></div>
 <script type="text/javascript">pluginNotice();</script>
 <?php } if(!$_G['setting']['bbclosed'] && !$_G['member']['freeze'] && !$_G['member']['groupexpiry'] && $_G['setting']['disableipnotice'] != 1 && $_G['uid'] && !empty($_G['cookie']['lip'])) { ?>

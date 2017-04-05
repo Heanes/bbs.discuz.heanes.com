@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: wechat.class.php 35165 2014-12-23 07:12:04Z nemohou $
+ *      $Id: wechat.class.php 36284 2016-12-12 00:47:50Z nemohou $
  */
 
 if (!defined('IN_DISCUZ')) {
@@ -268,7 +268,7 @@ class WeChat {
 		return array($isqrapi, $qrcodeurl, $codeenc, $code);
 	}
 
-	static public function redirect($type) {
+	static public function redirect($type = '') {
 		global $_G;
 		$hook = unserialize($_G['setting']['wechatredirect']);
 		if (!$hook || !in_array($hook['plugin'], $_G['setting']['plugins']['available'])) {
@@ -285,7 +285,7 @@ class WeChat {
 		if (!method_exists($class, $hook['method'])) {
 			return;
 		}
-		$return = $class->$hook['method']($type);
+		$return = call_user_func(array($class, $hook['method']), $type);
 		if($return) {
 			return $return;
 		}
@@ -435,16 +435,12 @@ class WeChat {
 			'groupid' => $groupid,
 		), 0);
 
-		//统计
 		include_once libfile('function/stat');
 		updatestat('register');
 
 		return $uid;
 	}
 
-	/**
-	 * 同步微信头像处理
-	 */
 	static public function syncAvatar($uid, $avatar) {
 
 		if(!$uid || !$avatar) {
@@ -496,9 +492,6 @@ class WeChat {
 
 class uploadUcAvatar {
 
-	/**
-	 * 上传至uc头像
-	 */
 	public static function upload($uid, $localFile) {
 
 		global $_G;

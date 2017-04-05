@@ -4,18 +4,18 @@
 $_config = array();
 
 // ----------------------------  CONFIG DB  ----------------------------- //
-$_config['db']['1']['dbhost'] = '127.0.0.1';
-$_config['db']['1']['dbuser'] = 'root';
-$_config['db']['1']['dbpw'] = '123456';
+$_config['db']['1']['dbhost'] = 'localhost';
+$_config['db']['1']['dbuser'] = 'web_user_heanes.com';
+$_config['db']['1']['dbpw'] = 'p()P]aHqCEfwVY@7';
 $_config['db']['1']['dbcharset'] = 'utf8';
 $_config['db']['1']['pconnect'] = '0';
 $_config['db']['1']['dbname'] = 'bbs.discuz.heanes.com';
-$_config['db']['1']['tablepre'] = 'heanes_';
+$_config['db']['1']['tablepre'] = 'discuz_';
 $_config['db']['slave'] = '';
 $_config['db']['common']['slave_except_table'] = '';
 
 // --------------------------  CONFIG MEMORY  --------------------------- //
-$_config['memory']['prefix'] = 'rfFpMT_';
+$_config['memory']['prefix'] = 'zxAImx_';
 $_config['memory']['redis']['server'] = '';
 $_config['memory']['redis']['port'] = 6379;
 $_config['memory']['redis']['pconnect'] = 1;
@@ -50,12 +50,12 @@ $_config['output']['ajaxvalidate'] = '0';
 $_config['output']['iecompatible'] = '0';
 
 // --------------------------  CONFIG COOKIE  --------------------------- //
-$_config['cookie']['cookiepre'] = 'rsid_';
+$_config['cookie']['cookiepre'] = 'hpH1_';
 $_config['cookie']['cookiedomain'] = '';
 $_config['cookie']['cookiepath'] = '/';
 
 // -------------------------  CONFIG SECURITY  -------------------------- //
-$_config['security']['authkey'] = '7956daDBm2Jrt7eQ';
+$_config['security']['authkey'] = 'd72d4drliJHbLiQ5';
 $_config['security']['urlxssdefend'] = 1;
 $_config['security']['attackevasive'] = '0';
 $_config['security']['querysafe']['status'] = 1;

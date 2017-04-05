@@ -53,7 +53,6 @@ if(!submitcheck('settingsubmit')) {
 	showtableheader();
 	showsetting(lang('plugin/wechat', 'wechat_mptype'), array('setting[wechat_mtype]', array(
 		array(0, lang('plugin/wechat', 'wechat_mptype_0'), array('qrcode' => 'none')),
-		//array(1, lang('plugin/wechat', 'wechat_mptype_1'), array('qrcode' => '')),
 		array(2, lang('plugin/wechat', 'wechat_mptype_2'), array('qrcode' => 'none')),
 	)), $setting['wechat_mtype'], 'mradio', 0, 0, lang('plugin/wechat', 'wechat_mptype_comment'));
 	showtagheader('tbody', 'qrcode', $setting['wechat_mtype'] == 1);

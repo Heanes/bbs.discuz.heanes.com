@@ -4,13 +4,13 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: uc.php 34214 2013-11-11 02:33:40Z hypowang $
+ *      $Id: uc.php 36303 2016-12-15 09:11:58Z nemohou $
  */
 
 error_reporting(0);
 
 define('UC_CLIENT_VERSION', '1.6.0');
-define('UC_CLIENT_RELEASE', '20110501');
+define('UC_CLIENT_RELEASE', '20170101');
 
 define('API_DELETEUSER', 1);
 define('API_RENAMEUSER', 1);
@@ -60,7 +60,7 @@ if(!defined('IN_UC')) {
 
 	if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
 		$uc_note = new uc_note();
-		echo $uc_note->$get['action']($get, $post);
+		echo call_user_func(array($uc_note, $get['action']), $get, $post);
 		exit();
 	} else {
 		exit(API_RETURN_FAILED);
@@ -237,6 +237,9 @@ class uc_note {
 		$data = array();
 		if(is_array($post)) {
 			foreach($post as $k => $v) {
+				if(substr($v['findpattern'], 0, 1) != '/' || substr($v['findpattern'], -3) != '/is') {
+					$v['findpattern'] = '/' . preg_quote($v['findpattern'], '/') . '/is';
+				}
 				$data['findpattern'][$k] = $v['findpattern'];
 				$data['replace'][$k] = $v['replacement'];
 			}

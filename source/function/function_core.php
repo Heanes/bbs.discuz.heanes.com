@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 34523 2014-05-15 04:22:29Z nemohou $
+ *      $Id: function_core.php 36324 2016-12-22 01:01:16Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -518,6 +518,14 @@ function checktplrefresh($maintpl, $subtpl, $timecompare, $templateid, $cachefil
 
 function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primaltpl='') {
 	global $_G;
+
+	if($_G['setting']['plugins']['func'][HOOKTYPE]['template']) {
+		$param = func_get_args();
+		$hookreturn = hookscript('template', 'global', 'funcs', array('param' => $param, 'caller' => 'template'), 'template');
+		if($hookreturn) {
+			return $hookreturn;
+		}
+	}
 
 	static $_init_style = false;
 	if($_init_style === false) {
@@ -1086,7 +1094,9 @@ function output_replace($content) {
 			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
 		}
 
-		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
+		foreach($_G['setting']['output']['preg']['search'] as $key => $value) {
+			$content = preg_replace_callback($value, create_function('$matches', 'return '.$_G['setting']['output']['preg']['replace'][$key].';'), $content);
+		}
 	}
 
 	return $content;
@@ -1164,7 +1174,7 @@ function hookscript($script, $hscript, $type = 'funcs', $param = array(), $func 
 					if(!method_exists($pluginclasses[$classkey], $hookfunc[1])) {
 						continue;
 					}
-					$return = $pluginclasses[$classkey]->$hookfunc[1]($param);
+					$return = call_user_func(array($pluginclasses[$classkey], $hookfunc[1]), $param);
 
 					if(substr($hookkey, -7) == '_extend' && !empty($_G['setting']['pluginhooks'][$hookkey])) {
 						continue;
@@ -1202,11 +1212,11 @@ function hookscriptoutput($tplfile) {
 		return;
 	}
 	hookscript('global', 'global');
+	$_G['hookscriptoutput'] = true;
 	if(defined('CURMODULE')) {
 		$param = array('template' => $tplfile, 'message' => $_G['hookscriptmessage'], 'values' => $_G['hookscriptvalues']);
 		hookscript(CURMODULE, $_G['basescript'], 'outputfuncs', $param);
 	}
-	$_G['hookscriptoutput'] = true;
 }
 
 function pluginmodule($pluginid, $type) {
@@ -1504,6 +1514,11 @@ function dreferer($default = '') {
 	}
 
 	$reurl = parse_url($_G['referer']);
+
+	if(!$reurl || (isset($reurl['scheme']) && !in_array(strtolower($reurl['scheme']), array('http', 'https')))) {
+		$_G['referer'] = '';
+	}
+
 	if(!empty($reurl['host']) && !in_array($reurl['host'], array($_SERVER['HTTP_HOST'], 'www.'.$_SERVER['HTTP_HOST'])) && !in_array($_SERVER['HTTP_HOST'], array($reurl['host'], 'www.'.$reurl['host']))) {
 		if(!in_array($reurl['host'], $_G['setting']['domain']['app']) && !isset($_G['setting']['domain']['list'][$reurl['host']])) {
 			$domainroot = substr($reurl['host'], strpos($reurl['host'], '.')+1);
@@ -1516,7 +1531,7 @@ function dreferer($default = '') {
 	}
 
 	$_G['referer'] = durlencode($_G['referer']);
-	return$_G['referer'];
+	return $_G['referer'];
 }
 
 function ftpcmd($cmd, $arg1 = '') {
@@ -1978,7 +1993,7 @@ function userappprompt() {
 }
 
 function dintval($int, $allowarray = false) {
-	$ret = intval($int);
+	$ret = floatval($int);
 	if($int == $ret || !$allowarray && is_array($int)) return $ret;
 	if($allowarray && is_array($int)) {
 		foreach($int as &$v) {
@@ -2086,6 +2101,17 @@ function currentlang() {
 		return '';
 	}
 }
+if(PHP_VERSION < '7.0.0') {
+	function dpreg_replace($pattern, $replacement, $subject, $limit = -1, &$count) {
+		return preg_replace($pattern, $replacement, $subject, $limit, $count);
+	}
+} else {
+	function dpreg_replace($pattern, $replacement, $subject, $limit = -1, &$count) {
+		require_once libfile('function/preg');
+		return _dpreg_replace($pattern, $replacement, $subject, $limit, $count);
+	}
+}
+
 
 
 ?>

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: config_global_default.php 34020 2013-09-22 05:48:16Z nemohou $
+ *      $Id: config_global_default.php 36287 2016-12-12 03:59:05Z nemohou $
  */
 
 $_config = array();
@@ -183,5 +183,17 @@ $_config['remote']['cron'] = 0;
 
 // $_GET|$_POST的兼容处理，0为关闭，1为开启；开启后即可使用$_G['gp_xx'](xx为变量名，$_GET和$_POST集合的所有变量名)，值为已经addslashes()处理过
 $_config['input']['compatible'] = 1;
+
+// Addon Setting
+//$_config['addonsource'] = 'xx1';
+//$_config['addon'] = array(
+//    'xx1' => array(
+//	'website_url' => 'http://127.0.0.1/AppCenter',
+//	'download_url' => 'http://127.0.0.1/AppCenter/index.php',
+//	'download_ip' => '',
+//	'check_url' => 'http://127.0.0.1/AppCenter/?ac=check&file=',
+//	'check_ip' => ''
+//    )
+//);
 
 ?>

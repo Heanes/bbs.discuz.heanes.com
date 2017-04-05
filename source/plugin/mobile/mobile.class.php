@@ -4,15 +4,15 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: mobile.class.php 35167 2014-12-25 02:24:21Z nemohou $
+ *      $Id: mobile.class.php 36332 2016-12-30 01:44:19Z nemohou $
  */
 
 define("MOBILE_PLUGIN_VERSION", "4");
-define("REQUEST_METHOD_DOMAIN", 'http://wsq.discuz.qq.com');
+define("REQUEST_METHOD_DOMAIN", 'http://wsq.discuz.com');
 
 class mobile_core {
 
-	function result($result) {
+	static function result($result) {
 		global $_G;
 		ob_end_clean();
 		function_exists('ob_gzhandler') ? ob_start('ob_gzhandler') : ob_start();
@@ -27,7 +27,7 @@ class mobile_core {
 		exit;
 	}
 
-	function format($result) {
+	static function format($result) {
 		switch (gettype($result)) {
 			case 'array':
 				foreach($result as $_k => $_v) {
@@ -44,7 +44,7 @@ class mobile_core {
 		return $result;
 	}
 
-	function json($encode) {
+	static function json($encode) {
 		if(!empty($_GET['debug']) && defined('DISCUZ_DEBUG') && DISCUZ_DEBUG) {
 			return debug($encode);
 		}
@@ -52,7 +52,7 @@ class mobile_core {
 		return CJSON::encode($encode);
 	}
 
-	function getvalues($variables, $keys, $subkeys = array()) {
+	static function getvalues($variables, $keys, $subkeys = array()) {
 		$return = array();
 		foreach($variables as $key => $value) {
 			foreach($keys as $k) {
@@ -70,14 +70,14 @@ class mobile_core {
 		return $return;
 	}
 
-	function arraystring($array) {
+	static function arraystring($array) {
 		foreach($array as $k => $v) {
 			$array[$k] = is_array($v) ? mobile_core::arraystring($v) : (string)$v;
 		}
 		return $array;
 	}
 
-	function variable($variables = array()) {
+	static function variable($variables = array()) {
 		global $_G;
 		if(in_array('mobileoem', $_G['setting']['plugins']['available'])) {
 			$check = C::t('#mobileoem#mobileoem_member')->fetch($_G['uid']);
@@ -172,7 +172,7 @@ class mobile_core {
 		return $xml;
 	}
 
-	function diconv_array($variables, $in_charset, $out_charset) {
+	static function diconv_array($variables, $in_charset, $out_charset) {
 		foreach($variables as $_k => $_v) {
 			if(is_array($_v)) {
 				$variables[$_k] = mobile_core::diconv_array($_v, $in_charset, $out_charset);
@@ -183,48 +183,30 @@ class mobile_core {
 		return $variables;
 	}
 
-	/**
-	 * 设置跨域请求header
-	 * @param type $request_method
-	 * @param type $origin
-	 */
-	function make_cors($request_method, $origin = '') {
+	static function make_cors($request_method, $origin = '') {
 
 		$origin = $origin ? $origin : REQUEST_METHOD_DOMAIN;
 
 		if ($request_method === 'OPTIONS') {
-			// 这个*可以设置为想允许的域名比如
 			header('Access-Control-Allow-Origin:'.$origin);
 
-			/**
-			* 是否允许发送cookie，以及支持的请求。
-			*/
 			header('Access-Control-Allow-Credentials:true');
 			header('Access-Control-Allow-Methods:GET, POST, OPTIONS');
 
-			// 自定义一些头，这个也可以当作一个密钥，必须与请求时候的头是一致的。
-			//header('Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type');
 
-			/**
-			// 设置一个过期时间，由于options只是一个握手的工作，所以时间可以设的长一点儿
-			 *
-			 */
 			header('Access-Control-Max-Age:1728000');
 			header('Content-Type:text/plain charset=UTF-8');
 			header("status: 204");
 			header('HTTP/1.0 204 No Content');
 			header('Content-Length: 0',true);
-			//header('Content-Type: text/html',true);
 			flush();
 		}
 
-		// 真实的请求数据
 		if ($request_method === 'POST') {
 
 			header('Access-Control-Allow-Origin:'.$origin);
 			header('Access-Control-Allow-Credentials:true');
 			header('Access-Control-Allow-Methods:GET, POST, OPTIONS');
-			//header('Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type');
 		}
 
 		if ($request_method === 'GET') {
@@ -232,19 +214,11 @@ class mobile_core {
 			header('Access-Control-Allow-Origin:'.$origin);
 			header('Access-Control-Allow-Credentials:true');
 			header('Access-Control-Allow-Methods:GET, POST, OPTIONS');
-			//header('Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type');
 		}
 
-		//credentials 使用注意 http://msdn.microsoft.com/zh-cn/library/ie/dn423949(v=vs.85).aspx
-		//SEC7121 "当凭据标志设置为 True 时，不允许 Access-Control-Allow-Origin 中的通配符。
-		//服务器正在标头中返回“Access-Control-Allow-Origin: *”，但当在 XMLHttpRequest 中将 withCredentials 标志设置为 True 时，则不允许该操作。
-		//需要修改服务器端处理程序以返回“Access-Control-Allow-Origin”标头，该标头特别允许此类请求上的原点。如果你不能控制服务器端处理程序，则需要与执行此操作的开发人员联系。
-		//
-		//client:xhr.withCredentials = true;
-		//server:header('Access-Control-Allow-Credentials:true');
 	}
 
-	function usergroupIconId($groupid) {
+	static function usergroupIconId($groupid) {
 		global $_G;
 		if($_G['cache']['usergroupIconId']) {
 			return $_G['cache']['usergroupIconId']['variable'][$groupid];
@@ -275,7 +249,7 @@ class mobile_core {
 		}
 	}
 
-	function activeHook($module, $mobileapihook, &$param, $isavariables = false) {
+	static function activeHook($module, $mobileapihook, &$param, $isavariables = false) {
 		global $_G;
 		if($isavariables) {
 			$mobileapihook[$module] = array(
@@ -301,9 +275,9 @@ class mobile_core {
 					continue;
 				}
 				if(!$isavariables) {
-					$value[$module.'_'.$hookname][$plugin] = $pluginclasses[$hook['class']]->$hook['method']($param);
+					$value[$module.'_'.$hookname][$plugin] = call_user_func(array($pluginclasses[$hook['class']], $hook['method']), $param);
 				} else {
-					$pluginclasses[$hook['class']]->$hook['method']($param);
+					call_user_func(array($pluginclasses[$hook['class']], $hook['method']), $param);
 				}
 			}
 		}

@@ -6,7 +6,6 @@
  *
  *      $Id: credit.php 34983 2014-09-22 06:16:09Z nemohou $
  */
-//note ฑํว้ @ Discuz! X3
 
 if (!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

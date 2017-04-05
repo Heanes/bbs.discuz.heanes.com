@@ -34,9 +34,7 @@ if(!function_exists('updatetable')) {
 		foreach($newtables as $i => $newtable) {
 			$newcols = updatetable_getcolumn($newsqls[$i]);
 
-			//获取当前SQL
 			if(!$query = DB::query("SHOW CREATE TABLE ".DB::table($newtable), 'SILENT')) {
-				//添加表
 				preg_match("/(CREATE TABLE .+?)\s*(ENGINE|TYPE)\s*=\s*(\w+)/is", $newsqls[$i], $maths);
 
 				$maths[3] = strtoupper($maths[3]);
@@ -57,7 +55,6 @@ if(!function_exists('updatetable')) {
 				$value = DB::fetch($query);
 				$oldcols = updatetable_getcolumn($value['Create Table']);
 
-				//获取升级SQL文
 				$updates = array();
 				$allfileds =array_keys($newcols);
 				foreach ($newcols as $key => $value) {
@@ -108,7 +105,6 @@ if(!function_exists('updatetable')) {
 					}
 				}
 
-				//升级处理
 				if(!empty($updates)) {
 					$usql = "ALTER TABLE ".DB::table($newtable)." ".implode(', ', $updates);
 					if(!DB::query($usql, 'SILENT')) {
@@ -130,8 +126,8 @@ if(!function_exists('updatetable')) {
 		foreach ($cols as $value) {
 			$value = trim($value);
 			if(empty($value)) continue;
-			$value = updatetable_remakesql($value);//特使字符替换
-			if(substr($value, -1) == ',') $value = substr($value, 0, -1);//去掉末尾逗号
+			$value = updatetable_remakesql($value);
+			if(substr($value, -1) == ',') $value = substr($value, 0, -1);
 
 			$vs = explode(' ', $value);
 			$cname = $vs[0];
@@ -159,8 +155,8 @@ if(!function_exists('updatetable')) {
 	}
 
 	function updatetable_remakesql($value) {
-		$value = trim(preg_replace("/\s+/", ' ', $value));//空格标准化
-		$value = str_replace(array('`',', ', ' ,', '( ' ,' )', 'mediumtext'), array('', ',', ',','(',')','text'), $value);//去掉无用符号
+		$value = trim(preg_replace("/\s+/", ' ', $value));
+		$value = str_replace(array('`',', ', ' ,', '( ' ,' )', 'mediumtext'), array('', ',', ',','(',')','text'), $value);
 		return $value;
 	}
 

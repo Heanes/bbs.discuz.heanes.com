@@ -6,7 +6,6 @@
  *
  *      $Id: sub_threadlist.php 35068 2014-11-04 02:37:45Z nemohou $
  */
-//note checkpost.sub @ Discuz! X2.5
 
 if (!defined('IN_MOBILE_API')) {
 	exit('Access Denied');

@@ -10,7 +10,6 @@ if (!defined('IN_MOBILE_API')) {
 	exit('Access Denied');
 }
 
-// define('MOBILE_HIDE_STICKY', !isset($_GET['hidesticky']) ? 1 : $_GET['hidesticky']);
 
 $_GET['mod'] = 'forumdisplay';
 include_once 'forum.php';
