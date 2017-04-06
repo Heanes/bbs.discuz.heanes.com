@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: discuz_application.php 36327 2016-12-23 05:11:48Z nemohou $
+ *      $Id: discuz_application.php 36342 2017-01-09 01:15:30Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -378,17 +378,19 @@ class discuz_application extends discuz_base{
 
 	private function _get_client_ip() {
 		$ip = $_SERVER['REMOTE_ADDR'];
-		if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
-		} elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches)) {
-			foreach ($matches[0] AS $xip) {
-				if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
-					$ip = $xip;
-					break;
+		if (!$this->config['security']['onlyremoteaddr']) {
+			if (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
+				$ip = $_SERVER['HTTP_CLIENT_IP'];
+			} elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches)) {
+				foreach ($matches[0] AS $xip) {
+					if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
+						$ip = $xip;
+						break;
+					}
 				}
 			}
 		}
-		return $ip;
+		return $ip == '::1' ? '127.0.0.1' : $ip;
 	}
 
 	private function _init_db() {
@@ -734,6 +736,9 @@ class discuz_application extends discuz_base{
 			$unallowmobile = true;
 		}
 
+		if(getgpc('forcemobile')) {
+			dsetcookie('dismobilemessage', '1', 3600);
+		}
 
 		$mobile = getgpc('mobile');
 		$mobileflag = isset($this->var['mobiletpl'][$mobile]);

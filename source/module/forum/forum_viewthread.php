@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: forum_viewthread.php 36293 2016-12-14 02:50:56Z nemohou $
+ *      $Id: forum_viewthread.php 36348 2017-01-13 06:36:44Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -262,6 +262,8 @@ if($_G['forum_thread']['replycredit'] > 0) {
 	$_G['forum_thread']['replycredit_rule'] = C::t('forum_replycredit')->fetch($thread['tid']);
 	$_G['forum_thread']['replycredit_rule']['remaining'] = $_G['forum_thread']['replycredit'] / $_G['forum_thread']['replycredit_rule']['extcredits'];
 	$_G['forum_thread']['replycredit_rule']['extcreditstype'] = $_G['forum_thread']['replycredit_rule']['extcreditstype'] ? $_G['forum_thread']['replycredit_rule']['extcreditstype'] : $_G['setting']['creditstransextra'][10] ;
+} else {
+	$_G['forum_thread']['replycredit_rule']['extcreditstype'] = $_G['setting']['creditstransextra'][10];
 }
 $_G['group']['raterange'] = $_G['setting']['modratelimit'] && $adminid == 3 && !$_G['forum']['ismoderator'] ? array() : $_G['group']['raterange'];
 
@@ -315,8 +317,8 @@ $_G['forum']['allowreply'] = isset($_G['forum']['allowreply']) ? $_G['forum']['a
 $_G['forum']['allowpost'] = isset($_G['forum']['allowpost']) ? $_G['forum']['allowpost'] : '';
 
 $allowpostreply = ($_G['forum']['allowreply'] != -1) && (($_G['forum_thread']['isgroup'] || (!$_G['forum_thread']['closed'] && !checkautoclose($_G['forum_thread']))) || $_G['forum']['ismoderator']) && ((!$_G['forum']['replyperm'] && $_G['group']['allowreply']) || ($_G['forum']['replyperm'] && forumperm($_G['forum']['replyperm'])) || $_G['forum']['allowreply']);
-$fastpost = $_G['setting']['allowfastreply'] && !$_G['forum_thread']['archiveid'] && ($_G['forum']['status'] != 3 || $_G['isgroupuser']);
-$allowfastpost = $_G['setting']['allowfastreply'] && $allowpostreply;
+$fastpost = $_G['setting']['fastpost'] && !$_G['forum_thread']['archiveid'] && ($_G['forum']['status'] != 3 || $_G['isgroupuser']);
+$allowfastpost = $_G['setting']['fastpost'] && $allowpostreply;
 if(!$_G['uid'] && ($_G['setting']['need_avatar'] || $_G['setting']['need_email'] || $_G['setting']['need_friendnum']) || !$_G['adminid'] && (!cknewuser(1) || $_G['setting']['newbiespan'] && (!getuserprofile('lastpost') || TIMESTAMP - getuserprofile('lastpost') < $_G['setting']['newbiespan'] * 60) && TIMESTAMP - $_G['member']['regdate'] < $_G['setting']['newbiespan'] * 60)) {
 	$allowfastpost = false;
 }
@@ -1034,7 +1036,7 @@ function viewthread_updateviews($tableid) {
 
 	if(!$_G['setting']['preventrefresh'] || $_G['cookie']['viewid'] != 'tid_'.$_G['tid']) {
 		if(!$tableid && $_G['setting']['optimizeviews']) {
-			if($_G['forum_thread']['addviews']) {
+			if(isset($_G['forum_thread']['addviews'])) {
 				if($_G['forum_thread']['addviews'] < 100) {
 					C::t('forum_threadaddviews')->update_by_tid($_G['tid']);
 				} else {
@@ -1355,7 +1357,7 @@ function viewthread_baseinfo($post, $extra) {
 		if($field != 'qq') {
 			$v = profile_show($field, $post);
 		} elseif(!empty($post['qq'])) {
-			$v = '<a href="http://wpa.qq.com/msgrd?V=3&Uin='.$post['qq'].'&Site='.$_G['setting']['bbname'].'&Menu=yes&from=discuz" target="_blank" title="'.lang('spacecp', 'qq_dialog').'"><img src="'.STATICURL.'/image/common/qq_big.gif" alt="QQ" style="margin:0px;"/></a>';
+			$v = '<a href="http://wpa.qq.com/msgrd?v=3&uin='.$post['qq'].'&site='.$_G['setting']['bbname'].'&menu=yes&from=discuz" target="_blank" title="'.lang('spacecp', 'qq_dialog').'"><img src="'.STATICURL.'/image/common/qq_big.gif" alt="QQ" style="margin:0px;"/></a>';
 		}
 		if($v) {
 			if(!isset($_G['cache']['profilesetting'])) {

@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: lang_admincp.php 36306 2016-12-16 08:12:49Z nemohou $
+ *      $Id: lang_admincp.php 36362 2017-02-04 02:02:03Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -271,6 +271,8 @@ $lang = array
 
 	'admincp_maptext' => '管理中心导航(ESC键)',
 	'admincp_maptitle' => '管理中心导航',
+
+	'tiny_bbcode_support' => '<em>(支持[color][b][u][i][s])</em>',
 
 	'nav_newwin' => '新窗口打开',
 	'nav_index' => '首页',
@@ -1009,8 +1011,8 @@ $lang = array
 	'setting_styles_forumdisplay_stick_comment' => '以英文状态下的逗号分割，只有三项有效，级别依次为从高至低',
 	'setting_styles_forumdisplay_visitedforums' => '显示最近访问版块数量',
 	'setting_styles_forumdisplay_visitedforums_comment' => '设置在版块列表和帖子浏览中显示最近访问过的版块数量，建议设置为 10 以内，0 为关闭此功能',
-	'setting_styles_forumdisplay_fastpost' => '快速发帖',
-	'setting_styles_forumdisplay_fastpost_comment' => '底部显示快速发帖表单',
+	'setting_styles_forumdisplay_fastpost' => '快速发帖/回帖',
+	'setting_styles_forumdisplay_fastpost_comment' => '在主题列表页底部显示快速发帖，在帖子内容页底部显示快速回帖',
 	'setting_styles_forumdisplay_fastsmilies' => '显示推荐表情',
 	'setting_styles_forumdisplay_fastsmilies_comment' => '在快速发帖右侧显示推荐表情。推荐的表情需要到“表情管理”中设置',
 	'setting_styles_forumdisplay_forumpicstyle_thumbwidth' => '主题封面宽度',
@@ -1101,7 +1103,7 @@ $lang = array
 	'setting_styles_viewthread_usernamepos' => '作者用户名显示位置',
 	'setting_styles_viewthread_imgcontent' => '主题内容生成图片宽度',
 	'setting_styles_viewthread_imgcontent_comment' => '本功能需要PHP支持GD库，内容里有中文需要将中文 TTF 字体文件放到 static/image/seccode/font/ch/ 目录下。默认100个汉字，字体不同宽度略有差别，请跟据实际效果调整。',
-	'setting_styles_viewthread_fast_reply' => '开启帖子快速回复',
+	'setting_styles_viewthread_fast_reply' => '开启主题帖快速回复',
 	'setting_styles_viewthread_fast_reply_comment' => '开启后将在主题帖下方展示快速回复框',
 	'setting_styles_viewthread_allow_replybg' => '开启帖子快速回复框背景',
 	'setting_styles_viewthread_allow_replybg_comment' => '开启后允许给帖子快速回复框添加背景图片',
@@ -1535,7 +1537,7 @@ $lang = array
 	'setting_cachethread_coefficient_forum_comment' => '将会覆盖以前的缓存系数值，可以按住 CTRL 多选',
 
 	'setting_memory' => '内存优化',
-	'setting_memory_tips' => '<li>启用内存优化功能将会大幅度提升程序性能和服务器的负载能力，内存优化功能需要服务器系统以及PHP扩展模块支持</li><li>目前支持的内存优化接口有 Memcache、eAccelerator、Alternative PHP Cache(APC)、Xcache、Redis 五种，优化系统将会依据当前服务器环境依次选用接口</li><li>内存接口的主要设置位于 config_global.php 当中，您可以通过编辑 config_global.php 进行高级设置</li>',
+	'setting_memory_tips' => '<li>启用内存优化功能将会大幅度提升程序性能和服务器的负载能力，内存优化功能需要服务器系统以及PHP扩展模块支持</li><li>目前支持的内存优化接口有 Memcache、eAccelerator、Alternative PHP Cache(APC)、Xcache、Redis、YAC、APCu，优化系统将会依据当前服务器环境依次选用接口</li><li>内存接口的主要设置位于 config_global.php 当中，您可以通过编辑 config_global.php 进行高级设置</li>',
 	'setting_memory_status' => '当前内存工作状态',
 	'setting_memory_php_enable' => '支持',
 	'setting_memory_php_disable' => '不支持',

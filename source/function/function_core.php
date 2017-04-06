@@ -4,7 +4,7 @@
  *      [Discuz!] (C)2001-2099 Comsenz Inc.
  *      This is NOT a freeware, use is subject to license terms
  *
- *      $Id: function_core.php 36324 2016-12-22 01:01:16Z nemohou $
+ *      $Id: function_core.php 36342 2017-01-09 01:15:30Z nemohou $
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -623,7 +623,7 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 		if(strpos($tpldir, 'plugin') && (file_exists(DISCUZ_ROOT.$mobiletplfile) || file_exists(substr(DISCUZ_ROOT.$mobiletplfile, 0, -4).'.php'))) {
 			$tplfile = $mobiletplfile;
 		} elseif(!file_exists(DISCUZ_ROOT.TPLDIR.'/'.$mobiletplfile) && !file_exists(substr(DISCUZ_ROOT.TPLDIR.'/'.$mobiletplfile, 0, -4).'.php')) {
-			$mobiletplfile = './template/default/'.$mobiletplfile;
+			$mobiletplfile = './template/default/'.$file.'.htm';
 			if(!file_exists(DISCUZ_ROOT.$mobiletplfile) && !$_G['forcemobilemessage']) {
 				$tplfile = str_replace($_G['mobiletpl'][IN_MOBILE].'/', '', $tplfile);
 				$file = str_replace($_G['mobiletpl'][IN_MOBILE].'/', '', $file);
